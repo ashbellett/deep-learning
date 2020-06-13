@@ -1,30 +1,5 @@
 import numpy as np
-
-np.random.seed(1)
-
-# Input data
-X = np.array([
-    [0, 0, 0],
-    [0, 0, 1],
-    [0, 1, 0],
-    [0, 1, 1],
-    [1, 0, 0],
-    [1, 0, 1],
-    [1, 1, 0],
-    [1, 1, 1],
-])
-
-# Training labels for input data
-y = np.array([[0, 1, 1, 1, 1, 1, 1, 0]]).T
-
-# Number of hidden layers in network
-layers = 3
-# Number of nodes in a hidden layer
-nodes = 3
-# Learning rate for gradient descent
-learning_rate = 0.05
-# Number of training iterations
-iterations = 100000
+from config import *
 
 def sigmoid(x):
     ''' Pass a value through the sigmoid function '''
@@ -99,6 +74,7 @@ def update_network(network, gradients, learning_rate):
     return network_updated
 
 def main(X, y, layers, nodes, learning_rate, iterations):
+    np.random.seed(1)
     network = initialise_network(X, y, layers, nodes)
     for _ in range(iterations):
         outputs = calculate_outputs(network, X)
