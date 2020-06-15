@@ -1,28 +1,17 @@
-import numpy as np
+# File path of input data
+filename = ''
 
-# Input data
-X = np.array([
-    [0, 0, 0],
-    [0, 0, 1],
-    [0, 1, 0],
-    [0, 1, 1],
-    [1, 0, 0],
-    [1, 0, 1],
-    [1, 1, 0],
-    [1, 1, 1],
-])
+# Number of samples to use in test set
+test_size = 10
 
-# Training labels for input data
-y = np.array([[0, 1, 1, 1, 1, 1, 1, 0]]).T
+# Number of samples to use in training batch
+batch_size = 10
 
-# Number of hidden layers in network
-layers = 3
-
-# Number of nodes in a hidden layer
-nodes = 3
+# Number of nodes in each hidden layer
+layers = (5, 5, 5)
 
 # Learning rate for gradient descent
 learning_rate = 0.05
 
 # Number of training iterations
-iterations = 100000
+iterations = 5000
