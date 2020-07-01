@@ -10,12 +10,14 @@ def get_data(filename):
     return (X, y)
 
 def split_data(X, y, test_size):
+    ''' Split a proportion of the training set from its labels '''
     x = X[0:test_size, :]
     X = X[test_size:, :]
     y = y[test_size:, :]
     return (X, y, x)
 
 def create_batches(X, y, batch_size=10):
+    ''' Create a batch of samples and labels '''
     data = np.hstack((X, y))
     np.random.shuffle(data)
     batch_count = int(data.shape[0]/batch_size)
@@ -98,9 +100,11 @@ def update_network(network, gradients, learning_rate):
     return network_updated
 
 def get_predictions(network, x):
+    ''' Pass unlabelled data to get predicted labels '''
     return get_outputs(network, x)[-1]
 
 def main(filename, test_size, batch_size, layers, learning_rate, iterations):
+    ''' Orchestrate forward and backward passes of the network '''
     np.random.seed(1)
     X, y = get_data(filename)
     X, y, x = split_data(X, y, test_size)
