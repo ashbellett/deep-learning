@@ -157,8 +157,8 @@ def main(file_name, test_size, batch_size, layers, learning_rate, iterations):
         test_error.append(np.around(prediction) - y_test[index])
         if np.around(prediction) - y_test[index] == 0:
             test_correct += 1
-    print('Test loss: ', np.average(test_error))
-    print('Test accuracy: ', str(100*test_correct/test_size) + '%')
+    print("Test loss: ", np.average(test_error))
+    print("Test accuracy: ", str(100 * test_correct / test_size) + "%")
 
 
 if __name__ == "__main__":
