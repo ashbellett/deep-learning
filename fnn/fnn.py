@@ -91,7 +91,7 @@ def get_losses(network, outputs, y):
     for output in reversed(range(len(outputs))):
         # Losses of output layer
         if output == len(outputs) - 1:
-            losses.append(y - outputs[output])
+            losses.append(outputs[output] - y)
         # Losses of hidden layers
         else:
             losses.append(
@@ -124,7 +124,7 @@ def update_network(network, gradients, learning_rate):
     """ Update network weights using gradient descent """
     network_updated = network.copy()
     for layer in range(len(network)):
-        network_updated[layer] += learning_rate * gradients[layer]
+        network_updated[layer] -= learning_rate * gradients[layer]
     return network_updated
 
 

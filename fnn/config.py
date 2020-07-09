@@ -8,7 +8,7 @@ test_size = 50
 batch_size = 5
 
 # Number of nodes in each hidden layer
-layers = (5,5)
+layers = (5, 5)
 
 # Learning rate for gradient descent
 learning_rate = 0.02
