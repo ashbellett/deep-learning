@@ -1,8 +1,6 @@
 """ Python implementation of a feed-forward neural network. """
 
 import numpy as np
-
-from numpy.random import random
 from tqdm import tqdm
 from config import *
 
@@ -50,15 +48,15 @@ def sigmoid(x):
 def initialise_network(X, y, layers=(2,)):
     """ Initialise a network with random weight vectors """
     # Weights between input layer and first hidden layer
-    network = [2 * random((X.shape[1] + 1, layers[0])) - 1]
+    network = [2 * np.random.random((X.shape[1] + 1, layers[0])) - 1]
     # Iterate across each hidden layer
     for layer, nodes in enumerate(layers):
         if layer == len(layers) - 1:
             # Weights between last hidden layer and output layer
-            network.append(2 * random((nodes + 1, y.shape[1])) - 1)
+            network.append(2 * np.random.random((nodes + 1, y.shape[1])) - 1)
         else:
             # Weights between consecutive hidden layers
-            network.append(2 * random((nodes + 1, layers[layer + 1])) - 1)
+            network.append(2 * np.random.random((nodes + 1, layers[layer + 1])) - 1)
     return network
 
 
@@ -133,13 +131,25 @@ def get_predictions(network, x):
     return get_outputs(network, x)[-1]
 
 
+def get_performance(network, X, y):
+    """ Print test loss and test accuracy of network using test dataset """
+    test_error = []
+    test_correct = 0
+    for index, x in enumerate(X):
+        prediction = get_predictions(network, np.array([x]))
+        test_error.append(np.around(prediction) - y[index])
+        if np.around(prediction) - y[index] == 0:
+            test_correct += 1
+    print("Test loss: ", np.average(test_error))
+    print("Test accuracy: ", str(100 * test_correct / test_size) + "%")
+
+
 def main(file_name, test_size, batch_size, layers, learning_rate, iterations):
     """ Orchestrate forward and backward passes of the network """
     np.random.seed(1)
     X, y = get_data(file_name)
     X_train, y_train, X_test, y_test = split_data(X, y, test_size)
     network = initialise_network(X_train, y_train, layers)
-
     for _ in tqdm(range(iterations)):
         batches = create_batches(X_train, y_train, batch_size)
         for batch in batches:
@@ -149,16 +159,7 @@ def main(file_name, test_size, batch_size, layers, learning_rate, iterations):
             partial_derivatives = get_partial_derivatives(outputs, losses)
             gradients = get_gradients(partial_derivatives)
             network = update_network(network, gradients, learning_rate)
-
-    test_error = []
-    test_correct = 0
-    for index, x in enumerate(X_test):
-        prediction = get_predictions(network, np.array([x]))
-        test_error.append(np.around(prediction) - y_test[index])
-        if np.around(prediction) - y_test[index] == 0:
-            test_correct += 1
-    print("Test loss: ", np.average(test_error))
-    print("Test accuracy: ", str(100 * test_correct / test_size) + "%")
+    get_performance(network, X_test, y_test)
 
 
 if __name__ == "__main__":
