@@ -131,7 +131,7 @@ def get_predictions(network, x):
     return get_outputs(network, x)[-1]
 
 
-def get_performance(network, X, y):
+def get_performance(network, X, y, test_size):
     """ Print test loss and test accuracy of network using test dataset """
     test_error = []
     test_correct = 0
@@ -159,7 +159,7 @@ def main(file_name, test_size, batch_size, layers, learning_rate, iterations):
             partial_derivatives = get_partial_derivatives(outputs, losses)
             gradients = get_gradients(partial_derivatives)
             network = update_network(network, gradients, learning_rate)
-    get_performance(network, X_test, y_test)
+    get_performance(network, X_test, y_test, test_size)
 
 
 if __name__ == "__main__":
