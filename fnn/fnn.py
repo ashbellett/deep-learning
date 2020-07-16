@@ -51,11 +51,11 @@ def initialise_network(X, y, layers=(2,)):
     network = [2 * np.random.random((X.shape[1] + 1, layers[0])) - 1]
     # Iterate across each hidden layer
     for layer, nodes in enumerate(layers):
+        # Weights between last hidden layer and output layer
         if layer == len(layers) - 1:
-            # Weights between last hidden layer and output layer
             network.append(2 * np.random.random((nodes + 1, y.shape[1])) - 1)
+        # Weights between consecutive hidden layers
         else:
-            # Weights between consecutive hidden layers
             network.append(2 * np.random.random((nodes + 1, layers[layer + 1])) - 1)
     return network
 
@@ -83,8 +83,8 @@ def get_outputs(network, X):
     return outputs
 
 
-def get_losses(network, outputs, y):
-    """ Calculate losses of each layer in the network """
+def get_loss_activation_derivatives(network, outputs, y):
+    """ Calculate partial derivatives of loss with respect to activations of each layer in the network """
     losses = []
     for output in reversed(range(len(outputs))):
         # Losses of output layer
@@ -100,8 +100,8 @@ def get_losses(network, outputs, y):
     return list(reversed(losses))
 
 
-def get_partial_derivatives(outputs, losses):
-    """ Calculate partial derivatives of each layer in the network """
+def get_loss_weight_derivatives(outputs, losses):
+    """ Calculate partial derivatives of loss with respect to weights of each layer in the network """
     partial_derivatives = []
     for output in range(1, len(outputs)):
         partial_derivatives.append(
@@ -111,7 +111,7 @@ def get_partial_derivatives(outputs, losses):
 
 
 def get_gradients(partial_derivatives):
-    """ Calculate gradients of each layer in the network"""
+    """ Calculate loss gradients of each layer in the network"""
     gradients = []
     for partial_derivative in partial_derivatives:
         gradients.append(np.average(partial_derivative, axis=0))
@@ -155,9 +155,13 @@ def main(file_name, test_size, batch_size, layers, learning_rate, iterations):
         for batch in batches:
             X, y = batch
             outputs = get_outputs(network, X)
-            losses = get_losses(network, outputs, y)
-            partial_derivatives = get_partial_derivatives(outputs, losses)
-            gradients = get_gradients(partial_derivatives)
+            loss_activation_derivatives = get_loss_activation_derivatives(
+                network, outputs, y
+            )
+            loss_weight_derivatives = get_loss_weight_derivatives(
+                outputs, loss_activation_derivatives
+            )
+            gradients = get_gradients(loss_weight_derivatives)
             network = update_network(network, gradients, learning_rate)
     get_performance(network, X_test, y_test, test_size)
 

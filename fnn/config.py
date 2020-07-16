@@ -1,5 +1,5 @@
 # File path of input data
-file_name = "C:\\Users\\Ash\\Documents\\Code\\deep-learning\\data\\iris.csv"
+file_name = ""
 
 # Number of samples to use in test set
 test_size = 50
