@@ -148,7 +148,7 @@ def main(file_name, test_size, batch_size, layers, learning_rate, iterations):
     """ Orchestrate forward and backward passes of the network """
     np.random.seed(1)
     X, y = get_data(file_name)
-    X_train, y_train, X_test, y_test = split_data(X, y, test_size)
+    X_train, y_trainz, X_test, y_test = split_data(X, y, test_size)
     network = initialise_network(X_train, y_train, layers)
     for _ in tqdm(range(iterations)):
         batches = create_batches(X_train, y_train, batch_size)

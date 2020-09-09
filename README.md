@@ -3,14 +3,12 @@ Python implementations of various deep learning algorithms.
 
 ## Usage
 ```
-python3 fnn/fnn.py
+python3 {fnn,cnn}/{fnn,cnn}.py
 ```
 ## Backlog
-- Activation functions: linear, sigmoid, relu, tanh, softmax
-- Loss functions: mse, ce
-- Persist: outputs, losses, PDs, gradients, weights
-- Performance metrics: TPs, FPs, accuracy, recall, precision, f1-score
-- Graphing performance as a function of iteration count and batch size
+- Serialise and persist: outputs, losses and network
+- Performance metrics: TPs, accuracy, recall, precision, f1-score
+- Graph performance as a function of iteration count and batch size
 - k-folds cross-validation
 - Write mathematics in LaTeX in markdown file
 - L2 Regularisation (add term to loss function) and drop-out
