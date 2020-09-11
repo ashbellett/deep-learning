@@ -1,34 +1,18 @@
 # File path of input data
-file_name = "/home/ash/code/deep-learning/data/fashion.csv"
+# Assumes first column is label and other columns are features
+data_train = ""
+data_test = ""
 
-# Image dimensions
-image_width = 28
-image_height = 28
+# Input image dimensions
+# (depth, height, width)
+image_shape = (1, 28, 28)
 
-# Architecture of convolutional network
-layers = (
-  {
-    'type': 'convolution',
-    'properties': {
-      'shape': (8,3,3),
-      'stride': 1,
-      'learning_rate': 0.005,
-      'activation': 'relu'
-    }
-  }, {
-    'type': 'maxpooling',
-    'properties': {
-      'size': 2,
-      'stride': 2
-    }
-  }, {
-    'type': 'dense',
-    'properties': {
-      'learning_rate': 0.01,
-      'activation': 'softmax'
-    }
-  }
-)
+# Convolutional layer hyper-parameters
+convolution_shape = (8, 3, 3)
+convolution_stride = 1
 
-# Number of samples to use in test set
-test_size = 1000
+# Max pooling layer hyper-parameters
+pooling_size = 2
+
+# Learning rate for gradient descent
+learning_rate = 0.005
