@@ -80,8 +80,8 @@ def backward_pass(network, gradient_loss_outputs, activations, pooled_image, con
     gradient_loss_dense, gradient_loss_activations = dense_backward(network[1], gradient_loss_outputs, pooled_image, activations)
     network[1] = dense_update(network[1], gradient_loss_activations, pooled_image, learning_rate)
     gradient_loss_maxpooling = maxpooling_backward(gradient_loss_dense, convolved_image, pooling_size)
-    gradient_loss_convolution = convolution_backward(network[0], gradient_loss_maxpooling, image)
-    network[0] = convolution_update(network[0], gradient_loss_convolution, learning_rate)
+    gradient_loss_filters = convolution_backward(network[0], gradient_loss_maxpooling, image)
+    network[0] = convolution_update(network[0], gradient_loss_filters, learning_rate)
     return network
 
 
