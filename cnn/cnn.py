@@ -103,6 +103,7 @@ def train_network(network, features, labels, image_shape, pooling_size, learning
             pooling_size,
             learning_rate
         )
+        # Cross entropy loss function using predicted likelihood of correct class
         losses.append(cross_entropy(outputs[label]))
         true_positives += 1 if np.argmax(outputs) == label else 0
         if (iteration+1)%60 == 0:
@@ -119,6 +120,7 @@ def test_network(network, features, labels):
     true_positives = 0
     for iteration, (image, label) in enumerate(zip(features, labels)):
         outputs, _, _, _ = forward_pass(network, image)
+        # Cross entropy loss function using predicted likelihood of correct class
         losses.append(cross_entropy(outputs[label]))
         true_positives += 1 if np.argmax(outputs) == label else 0
         if (iteration+1)%10 == 0:
@@ -138,9 +140,13 @@ def convolution_forward(parameters, image_volume):
     for filter_index, filter_volume in enumerate(parameters):
         for image_row in range(image_height - filter_height + 1):
             for image_column in range(image_width - filter_width + 1):
+                # Get 3D image region volume
                 image_region = image_volume[:image_depth, image_row : image_row + filter_height, image_column : image_column + filter_width]
+                # Reshape image region from 3D to 1D
                 image_vector = image_region.reshape(image_region.size)
+                # Reshape filter from 3D to 1D
                 filter_vector = filter_volume.reshape((filter_volume.size, 1))
+                # Dot product of reshaped vectors is equivalent to convolution of volumes
                 output[filter_index, image_row, image_column] = np.dot(image_vector, filter_vector)
     return output
 
@@ -153,7 +159,9 @@ def convolution_backward(parameters, gradients, image_volume):
     for filter_index, _ in enumerate(parameters):
         for image_row in range(image_height - filter_height + 1):
             for image_column in range(image_width - filter_width + 1):
+                # Get 3D image region volume
                 image_region = image_volume[:image_depth, image_row : image_row + filter_height, image_column : image_column + filter_width]
+                # Convolve image region with gradient of loss with respect to convolved image output
                 gradient_loss_filters[filter_index] += gradients[filter_index, image_row, image_column] * image_region
     return gradient_loss_filters
 
@@ -173,10 +181,12 @@ def maxpooling_forward(image_volume, pooling_size):
     for image_index, image in enumerate(image_volume):
         for pooled_row in range(pooled_height):
             for pooled_column in range(pooled_width):
+                # Get 2D image region
                 image_region = image[
                     pooled_row * pooling_size : pooling_size * (pooled_row + 1),
                     pooled_column * pooling_size : pooling_size * (pooled_column + 1)
                 ]
+                # Find maximum pixel value in region
                 output[image_index, pooled_row, pooled_column] = np.amax(image_region)
     return output
 
@@ -191,27 +201,34 @@ def maxpooling_backward(gradients, image_volume, pooling_size):
     for image_index, image in enumerate(image_volume):
         for image_row in range(pooled_height):
             for image_column in range(pooled_width):
+                # Get 2D image region
                 image_region = image[
                     image_row * pooling_size : pooling_size * (image_row + 1),
                     image_column * pooling_size : pooling_size * (image_column + 1),
                 ]
+                # Find maximum pixel value in region
                 maximum_pixel = np.amax(image_region)
                 for pooled_row in range(pooling_size):
                     for pooled_column in range(pooling_size):
+                        # Get pixel location containing maximum value
                         if image_region[pooled_row, pooled_column] == maximum_pixel:
+                            # Only update found location with gradient of loss with respect to max pooling output
                             output[
                                 image_index,
                                 image_row * pooling_size + pooled_row,
                                 image_column * pooling_size + pooled_column
                             ] = gradients[image_index, image_row, image_column]
+                            # Once one update has been made, don't need to update others
                             break
     return output
 
 
 def dense_forward(parameters, image_volume):
     ''' Pass linear combination of data and weights through activation function '''
+    # Convert image volume into 1D vector
     image_vector = image_volume.flatten()
     weights, biases = parameters
+    # Calculate linear combination of network parameters and input
     activations = np.dot(image_vector, weights) + biases
     output = softmax(activations)
     return output, activations
@@ -221,6 +238,7 @@ def dense_backward(parameters, gradients, image_volume, activations):
     """ Calculate gradient of loss with respect to dense layer input """
     weights, biases = parameters
     for index, gradient in enumerate(gradients):
+        # Results will remain zero if gradient of loss with respect to outputs is zero
         if gradient == 0:
             continue
         activations_exponential = np.exp(activations)
