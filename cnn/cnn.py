@@ -24,16 +24,17 @@ def get_data(file_name):
 
 
 def scale_features(features):
-    ''' Scale image pixel values about zero '''
+    """ Scale 8-bit image pixel values about zero """
     return np.array([image / 255 - 0.5 for image in features])
 
 
 def reshape_features(features, image_shape):
-    """ Reshape 1D feature vectors into 3D images """
+    """ Reshape 1D feature vectors into 3D image volumes """
     return np.array([image.reshape(image_shape) for image in features])
 
 
 def prepare_features(features, image_shape):
+    """ Prepare feature vectors by scaling and reshaping """
     features = features.copy()
     features = scale_features(features)
     features = reshape_features(features, image_shape)
@@ -132,7 +133,7 @@ def test_network(network, features, labels):
 
 
 def convolution_forward(parameters, image_volume):
-    """ Convolve a 3D image with a sequence of filters """
+    """ Convolve a 3D image with a sequence of 2D filters """
     image_depth, image_height, image_width = image_volume.shape
     filter_count, filter_depth, filter_height, filter_width = parameters.shape
     image_region = np.zeros((image_depth, filter_height, filter_width))
@@ -172,7 +173,7 @@ def convolution_update(parameters, gradients, learning_rate):
 
 
 def maxpooling_forward(image_volume, pooling_size):
-    """ Perform maximum pooling operation on a 3D image volume """
+    """ Perform maximum pooling on a 3D image volume """
     image_depth, image_height, image_width = image_volume.shape
     pooled_height = image_height // 2
     pooled_width = image_width // 2
@@ -230,6 +231,7 @@ def dense_forward(parameters, image_volume):
     weights, biases = parameters
     # Calculate linear combination of network parameters and input
     activations = np.dot(image_vector, weights) + biases
+    # Pass activations through softmax activation function
     output = softmax(activations)
     return output, activations
 
