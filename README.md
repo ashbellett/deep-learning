@@ -1,9 +1,11 @@
 # Deep Learning
 Python implementations of various deep learning algorithms.
-
+- Feed-forward network
+- Recurrent network
+- Convolutional network
 ## Usage
 ```
-python3 {fnn,cnn}/{fnn,cnn}.py
+python3 {fnn,rnn,cnn}/{fnn,rnn,cnn}.py
 ```
 ## Backlog
 - Serialise and persist: outputs, losses and network
