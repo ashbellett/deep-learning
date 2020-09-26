@@ -1,8 +1,8 @@
 # Deep Learning
 Python implementations of various deep learning algorithms.
-- Feed-forward network
-- Recurrent network
-- Convolutional network
+- `fnn`: Feed-forward network
+- `rnn`: Recurrent network
+- `cnn`: Convolutional network
 ## Usage
 ```
 python3 {fnn,rnn,cnn}/{fnn,rnn,cnn}.py
