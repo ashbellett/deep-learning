@@ -1,5 +1,5 @@
 # File path of input data
-file_name = "C:\\Users\\AshBellett\\Documents\\Projects\\Personal\\deep-learning\\data\\"
+file_name = "/home/ash/code/deep-learning/data/"
 
 #
 output_length = 2
